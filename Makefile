@@ -29,7 +29,7 @@ endif
 CC=sdcc
 CFLAGS+=-mmcs51 --no-xinit-opt -I${LIBDIR} -D${HARDWARE}
 
-AS=asx8051
+AS=sdas8051
 ASFLAGS+=-plosgff
 
 LDFLAGS=--code-loc 0x0000 --code-size 0x1800
@@ -43,10 +43,19 @@ LDFLAGS+=-L ${LIBDIR}
 %.rel : %.c
 	$(CC) -c $(CFLAGS) $(CPPFLAGS) $< -o $@
 
-default: std.hex
+default: usbjtag.hex
 
-std.hex: vectors.rel usbjtag.rel dscr.rel eeprom.rel ${HARDWARE}.rel startup.rel ${LIBDIR}/${LIB}
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $+ 
+#%.iic : %.hex
+#	./hex2bix -ir -f 0xC2 -m 0xF000 -c 0x1 -o $@ $<
+%.bix: %.hex
+	objcopy -I ihex -O binary $< $@
+
+usbjtag.hex: vectors.rel usbjtag.rel dscr.rel eeprom.rel ${HARDWARE}.rel startup.rel ${LIBDIR}/${LIB}
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $+
+	packihx $@ > .tmp.hex
+	rm $@
+	mv .tmp.hex $@
+	ls -al $@
 
 ${LIBDIR}/${LIB}:
 	make -C ${LIBDIR}
