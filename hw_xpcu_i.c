@@ -23,14 +23,24 @@
 
 //---------------------------------------------------------------------------
 
-#define SetTCK(x)     do{if(x) IOE|=0x08; else IOE&=~0x08; }while(0)
-#define SetTMS(x)     do{if(x) IOE|=0x10; else IOE&=~0x10; }while(0)
-#define SetTDI(x)     do{if(x) IOE|=0x40; else IOE&=~0x40; }while(0)
+#define JTAG_PORT IOE
+#define bmTCK bmBIT3
+#define bmTMS bmBIT4
+#define bmTDI bmBIT6
+#define bmTDO bmBIT5
+//#define bmPROG bmBIT1
+
+#define SetTCK(x)     do{if(x) JTAG_PORT|=bmTCK; else JTAG_PORT&=~bmTCK; }while(0)
+#define SetTMS(x)     do{if(x) JTAG_PORT|=bmTMS; else JTAG_PORT&=~bmTMS; }while(0)
+#define SetTDI(x)     do{if(x) JTAG_PORT|=bmTDI; else JTAG_PORT&=~bmTDI; }while(0)
+//#define GetTDO()      (JTAG_PORT&=bmTDO)
 #define GetTDO()      ((IOE>>5)&1)
 
 /* XPCU has neither AS nor PS mode pins */
 
 #define HAVE_OE_LED 1
+//#define bmLED bmBIT5
+//#define SetOELED(x)   do{if(x) JTAG_PORT|=bmLED; else JTAG_PORT&=~bmLED;}while(0)
 /* +0=green led, +1=red led */
 sbit at 0x80+1        OELED;
 #define SetOELED(x)   do{OELED=(x);}while(0)
@@ -108,15 +118,15 @@ void ProgIO_ShiftOut(unsigned char c)
 
   unsigned char lc=c;
 
-  if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc>>=1; IOE&=~0x08;
-  if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc>>=1; IOE&=~0x08;
-  if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc>>=1; IOE&=~0x08;
-  if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc>>=1; IOE&=~0x08;
+  SetTDI(lc & bmBIT0); SetTCK(1); lc>>=1; SetTCK(0);
+  SetTDI(lc & bmBIT0); SetTCK(1); lc>>=1; SetTCK(0);
+  SetTDI(lc & bmBIT0); SetTCK(1); lc>>=1; SetTCK(0);
+  SetTDI(lc & bmBIT0); SetTCK(1); lc>>=1; SetTCK(0);
 
-  if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc>>=1; IOE&=~0x08;
-  if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc>>=1; IOE&=~0x08;
-  if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc>>=1; IOE&=~0x08;
-  if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc>>=1; IOE&=~0x08;
+  SetTDI(lc & bmBIT0); SetTCK(1); lc>>=1; SetTCK(0);
+  SetTDI(lc & bmBIT0); SetTCK(1); lc>>=1; SetTCK(0);
+  SetTDI(lc & bmBIT0); SetTCK(1); lc>>=1; SetTCK(0);
+  SetTDI(lc & bmBIT0); SetTCK(1); lc>>=1; SetTCK(0);
 }
 
 unsigned char ProgIO_ShiftInOut(unsigned char c)
@@ -136,15 +146,15 @@ unsigned char ProgIO_ShiftInOut(unsigned char c)
   unsigned char carry;
   unsigned char lc=c;
 
-  carry = (IOE&0x20)<<2; if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc=carry|(lc>>1); IOE&=~0x08;
-  carry = (IOE&0x20)<<2; if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc=carry|(lc>>1); IOE&=~0x08;
-  carry = (IOE&0x20)<<2; if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc=carry|(lc>>1); IOE&=~0x08;
-  carry = (IOE&0x20)<<2; if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc=carry|(lc>>1); IOE&=~0x08;
+  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
+  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
+  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
+  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
 
-  carry = (IOE&0x20)<<2; if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc=carry|(lc>>1); IOE&=~0x08;
-  carry = (IOE&0x20)<<2; if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc=carry|(lc>>1); IOE&=~0x08;
-  carry = (IOE&0x20)<<2; if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc=carry|(lc>>1); IOE&=~0x08;
-  carry = (IOE&0x20)<<2; if(lc&1) IOE|=0x40; else IOE&=~0x40; IOE|=0x08; lc=carry|(lc>>1); IOE&=~0x08;
+  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
+  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
+  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
+  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
 
   return lc;
 }
