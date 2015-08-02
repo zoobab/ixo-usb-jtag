@@ -24,26 +24,40 @@
 //---------------------------------------------------------------------------
 
 #define JTAG_PORT IOE
-#define bmTCK bmBIT3
-#define bmTMS bmBIT4
-#define bmTDI bmBIT6
-#define bmTDO bmBIT5
-//#define bmPROG bmBIT1
 
-#define SetTCK(x)     do{if(x) JTAG_PORT|=bmTCK; else JTAG_PORT&=~bmTCK; }while(0)
-#define SetTMS(x)     do{if(x) JTAG_PORT|=bmTMS; else JTAG_PORT&=~bmTMS; }while(0)
-#define SetTDI(x)     do{if(x) JTAG_PORT|=bmTDI; else JTAG_PORT&=~bmTDI; }while(0)
-//#define GetTDO()      (JTAG_PORT&=bmTDO)
-#define GetTDO()      ((IOE>>5)&1)
+#define SetOrClear(port, mask, input) \
+  ((input) ? (port|=mask) : (port&=~mask))
+
+//#define SetTCK(x)     do{if(x) IOE|=0x08; else IOE&=~0x08; }while(0)
+#define bmTCK bmBIT3 // Output
+#define SetTCK(x)     SetOrClear(JTAG_PORT, bmTCK, x)
+
+//#define SetTMS(x)     do{if(x) IOE|=0x10; else IOE&=~0x10; }while(0)
+#define bmTMS bmBIT4 // Output
+#define SetTMS(x)     SetOrClear(JTAG_PORT, bmTMS, x)
+
+//#define SetTDI(x)     do{if(x) IOE|=0x40; else IOE&=~0x40; }while(0)
+#define bmTDI bmBIT6 // Output - Data from FX2 into FPGA
+#define SetTDI(x)     SetOrClear(JTAG_PORT, bmTDI, x)
+
+//#define GetTDO()      ((IOE>>5)&1)
+#define bmTDO bmBIT5 // Input - Data from FPGA into FX2
+#define bitTDO 5
+
+#define GetTDO()      GetTDOToBit(0)
+#define GetTDOToBit(bitPos) \
+ (((int)(bitTDO-bitPos) > (int)0) ? \
+   ((JTAG_PORT & bmTDO)>>(bitTDO-bitPos)) : \
+   ((JTAG_PORT & bmTDO)<<(bitPos-bitTDO)) ) \
 
 /* XPCU has neither AS nor PS mode pins */
 
 #define HAVE_OE_LED 1
-//#define bmLED bmBIT5
-//#define SetOELED(x)   do{if(x) JTAG_PORT|=bmLED; else JTAG_PORT&=~bmLED;}while(0)
 /* +0=green led, +1=red led */
 sbit at 0x80+1        OELED;
 #define SetOELED(x)   do{OELED=(x);}while(0)
+
+#define JTAG_PORT_OE bmTCK|bmTMS|bmTDI
 
 //-----------------------------------------------------------------------------
 
@@ -67,7 +81,7 @@ void ProgIO_Init(void)
 
   PORTACFG = 0x00; OEA = 0x03; IOA=0x01;
   PORTCCFG = 0x00; OEC = 0x00; IOC=0x00;
-  PORTECFG = 0x00; OEE = 0x58; IOE=0x00;
+  PORTECFG = 0x00; OEE = JTAG_PORT_OE; IOE=0x00;
 }
 
 void ProgIO_Set_State(unsigned char d)
@@ -146,15 +160,15 @@ unsigned char ProgIO_ShiftInOut(unsigned char c)
   unsigned char carry;
   unsigned char lc=c;
 
-  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
-  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
-  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
-  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
+  carry = GetTDOToBit(7); SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0); 
+  carry = GetTDOToBit(7); SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
+  carry = GetTDOToBit(7); SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
+  carry = GetTDOToBit(7); SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
 
-  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
-  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
-  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
-  carry = (IOE&0x20)<<2; SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
+  carry = GetTDOToBit(7); SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
+  carry = GetTDOToBit(7); SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
+  carry = GetTDOToBit(7); SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
+  carry = GetTDOToBit(7); SetTDI(lc & bmBIT0); SetTCK(1); lc=carry|(lc>>1); SetTCK(0);
 
   return lc;
 }
