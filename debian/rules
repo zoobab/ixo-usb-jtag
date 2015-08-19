@@ -30,7 +30,7 @@ build-indep-stamp:
 	dh_testdir
 
 	mkdir -p output
-	for HW in $(HARDWARE); do HARDWARE=$$HW $(MAKE); cp usbjtag.hex ./output/usbjtag-$$HW.hex; make clean; done
+	for HW in $(HARDWARE); do HARDWARE=$$HW $(MAKE); cp usbjtag.hex ./output/$$HW.hex; make clean; done
 	touch build-indep-stamp
 
 clean:
@@ -43,9 +43,11 @@ install: build-indep
 	dh_testroot
 	dh_prep
 	dh_installdirs
-
+	
 	mkdir -p $(CURDIR)/debian/ixo-usb-jtag/lib/firmware/ixo-usb-jtag
-	for HW in $(HARDWARE); do install -m644 ./output/usbjtag-$$HW.hex $(CURDIR)/debian/ixo-usb-jtag/lib/firmware/ixo-usb-jtag; done
+	for HW in $(HARDWARE); do install -m644 ./output/$$HW.hex $(CURDIR)/debian/ixo-usb-jtag/lib/firmware/ixo-usb-jtag; done
+	mkdir -p $(CURDIR)/debian/ixo-usb-jtag/lib/udev/rules.d
+	install -m644 scripts/ixo-usb-jtag.rules $(CURDIR)/debian/ixo-usb-jtag/lib/udev/rules.d/85-ixo-usb-jtag.rules
 
 # Build architecture-independent files here.
 binary-indep: build-indep install
