@@ -1,0 +1,5 @@
+ixo-usb-jtag (0.0.0-79-g81e0d87) trusty; urgency=low
+
+  * Initial attempt at packaging.
+
+ -- Tim 'mithro' Ansell <mithro@mithis.com>  Thu, 20 Aug 2014 00:39:00 -0100
