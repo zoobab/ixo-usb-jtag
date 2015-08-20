@@ -1,4 +1,4 @@
-ixo-usb-jtag (0.0.0-79-g81e0d87) trusty; urgency=low
+ixo-usb-jtag (0.0.0-81-gc7d809d-1) trusty; urgency=low
 
   * Initial attempt at packaging.
 

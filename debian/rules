@@ -5,8 +5,8 @@
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
 
-UPSTREAM_VERSION=$(shell dpkg-parsechangelog | sed -e '/^Version/!d' -e 's/^Version: //g' -e 's/-.*//g')
-UPSTREAM_REVISION=$(shell echo $(UPSTREAM_VERSION) | sed -e 's/.*-/-/')
+UPSTREAM_VERSION=$(shell dpkg-parsechangelog | sed -e '/^Version/!d' -e 's/^Version: //g' -e's/-[^-]*$$//')
+UPSTREAM_REVISION=$(shell echo v$(UPSTREAM_VERSION))
 UPSTREAM_GIT=http://github.com/mithro/ixo-usb-jtag.git
 UPSTREAM_CHECKOUT=ixo-usb-jtag-$(UPSTREAM_VERSION)
 
@@ -16,7 +16,7 @@ HARDWARE=hw_basic hw_saxo_l hw_xpcu_i hw_xpcu_x hw_nexys hw_opsis
 
 get-orig-source:
 	git clone $(UPSTREAM_GIT) $(UPSTREAM_CHECKOUT)
-	cd $(UPSTREAM_CHECKOUT); git checkout $(UPSTREAM_VERSION)
+	cd $(UPSTREAM_CHECKOUT); git checkout $(UPSTREAM_REVISION)
 	tar -zcf ../ixo-usb-jtag_$(UPSTREAM_VERSION).orig.tar.gz $(UPSTREAM_CHECKOUT)
 	rm -rf $(UPSTREAM_CHECKOUT)
 
