@@ -1,5 +1,11 @@
+ixo-usb-jtag (0.0.0-83-g68bf25b-1) trusty; urgency=low
+
+  * Adding customisation.
+
+ -- Tim 'mithro' Ansell <mithro@mithis.com>  Sun, 20 Sep 2015 19:28:00 +1000
+
 ixo-usb-jtag (0.0.0-81-gc7d809d-1) trusty; urgency=low
 
   * Initial attempt at packaging.
 
- -- Tim 'mithro' Ansell <mithro@mithis.com>  Thu, 20 Aug 2014 00:39:00 -0100
+ -- Tim 'mithro' Ansell <mithro@mithis.com>  Thu, 20 Aug 2015 00:39:00 -0100
