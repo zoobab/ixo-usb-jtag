@@ -299,13 +299,15 @@ str2_end:
 _str3::
 str3:   .db        str3_end - str3
         .db        DSCR_STRING
-        .db        '0, 0
-        .db        '0, 0
-        .db        '0, 0
-        .db        '0, 0
-        .db        '0, 0
-        .db        '0, 0
-        .db        '0, 0
-        .db        '0, 0
+        .db        '$H0, 0
+        .db        '$H1, 0
+        .db        '$H2, 0
+        .db        '$H3, 0
+        .db        '$H4, 0
+        .db        '$H5, 0
+        .db        '$H6, 0
+        .db        '$H7, 0
+        .db        '$H8, 0
+        .db        '$H9, 0
 str3_end:
 

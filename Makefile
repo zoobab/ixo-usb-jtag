@@ -45,6 +45,23 @@ LDFLAGS+=-L ${LIBDIR}
 
 default: usbjtag.hex
 
+dscr.a51: dscr.a51.in
+	export H="${HARDWARE}~~~~~~~~~"; cat dscr.a51.in | \
+	 sed \
+          -e"s/\$$H0/$${H:0:1}/" \
+          -e"s/\$$H1/$${H:1:1}/" \
+          -e"s/\$$H2/$${H:2:1}/" \
+          -e"s/\$$H3/$${H:3:1}/" \
+          -e"s/\$$H4/$${H:4:1}/" \
+          -e"s/\$$H5/$${H:5:1}/" \
+          -e"s/\$$H6/$${H:6:1}/" \
+          -e"s/\$$H7/$${H:7:1}/" \
+          -e"s/\$$H8/$${H:8:1}/" \
+          -e"s/\$$H9/$${H:9:1}/" | \
+	 sed \
+	  -e"s/        .db        '~, 0//" \
+	 > dscr.a51
+
 #%.iic : %.hex
 #	./hex2bix -ir -f 0xC2 -m 0xF000 -c 0x1 -o $@ $<
 %.bix: %.hex
@@ -83,7 +100,7 @@ ${HARDWARE}.rel: ${HARDWARE}.c hardware.h
 
 clean:
 	make -C ${LIBDIR} clean
-	rm -f *.lst *.asm *.lib *.sym *.rel *.mem *.map *.rst *.lnk *.hex
+	rm -f *.lst *.asm *.lib *.sym *.rel *.mem *.map *.rst *.lnk *.hex dscr.a51
 
 distclean: clean
 
