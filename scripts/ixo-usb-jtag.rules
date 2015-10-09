@@ -3,3 +3,6 @@ ACTION=="add", ATTRS{idVendor}=="16c0", ATTRS{idProduct}=="06ad", MODE="666"
 
 # Digilent Atlys board
 SUBSYSTEM=="usb", ACTION=="add", ATTRS{idVendor}=="1443", ATTRS{idProduct}=="0007", RUN+="/sbin/fxload -D $tempnode -t fx2lp -I /lib/firmware/ixo-usb-jtag/hw_nexys.hex"
+
+# Numato Opsis board
+SUBSYSTEM=="usb", ACTION=="add", ATTRS{idVendor}=="2A19", ATTRS{idProduct}=="0007", RUN+="/sbin/fxload -D $tempnode -t fx2lp -I /lib/firmware/ixo-usb-jtag/hw_opsis.hex"
