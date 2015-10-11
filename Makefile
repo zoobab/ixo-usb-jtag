@@ -18,6 +18,8 @@
 LIBDIR=fx2
 LIB=libfx2.lib
 
+SHELL := /bin/bash
+
 ifeq (${HARDWARE},)
   HARDWARE=hw_basic
   #HARDWARE=hw_saxo_l
