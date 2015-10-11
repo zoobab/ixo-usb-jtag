@@ -1,3 +1,9 @@
+ixo-usb-jtag (0.0.0-88-gd9e335b-1) trusty; urgency=low
+
+  * Version bump.
+
+ -- Tim 'mithro' Ansell <mithro@mithis.com>  Sun, 11 Oct 2015 21:18:00 +1100
+
 ixo-usb-jtag (0.0.0-85-g2df5d2f-1) trusty; urgency=low
 
   * Version bump.
