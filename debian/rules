@@ -30,7 +30,12 @@ build-indep-stamp:
 	dh_testdir
 
 	mkdir -p output
-	for HW in $(HARDWARE); do HARDWARE=$$HW $(MAKE); cp usbjtag.hex ./output/$$HW.hex; make clean; done
+	for HW in $(HARDWARE); do \
+		make clean || exit 1; \
+		HARDWARE=$$HW $(MAKE) || exit 1; \
+		cp usbjtag.hex ./output/$$HW.hex || exit 1; \
+		make clean || exit 1; \
+	done
 	touch build-indep-stamp
 
 clean:
