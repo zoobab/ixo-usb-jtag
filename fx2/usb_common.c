@@ -141,6 +141,7 @@ usb_handle_setup_packet (void)
   _usb_got_SUDAV = 0;
 
   // handle the standard requests...
+  SUDPTRCTL = 0x01;
 
   switch (bRequestType & bmRT_TYPE_MASK){
 
