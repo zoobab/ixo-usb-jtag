@@ -119,3 +119,15 @@ i2c_write (unsigned char addr, xdata const unsigned char *buf, unsigned char len
   I2CS |= bmSTOP;
   return 0;
 }
+
+xdata unsigned char eeprom_addr;
+unsigned char eeprom_read (unsigned char prom_addr, unsigned char addr, unsigned char length, xdata unsigned char *buf)
+{
+    eeprom_addr = addr;
+
+    // write the address we want to read to the prom
+    if ( !i2c_write( prom_addr, &eeprom_addr, 1 ) ) return 0;
+    if ( !i2c_read ( prom_addr, buf, length ) ) return 0;
+
+    return 1;
+}

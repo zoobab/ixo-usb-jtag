@@ -90,6 +90,8 @@ void usb_jtag_init(void)              // Called once at startup
 
    ProgIO_Enable();
 
+   hw_init();
+
    // Make Timer2 reload at 100 Hz to trigger Keepalive packets
 
    tmp = 65536 - ( 48000000 / 12 / 100 );
