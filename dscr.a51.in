@@ -257,8 +257,6 @@ _string_descriptors_end:
 _str0::
 str0:   .db        str0_end - str0
         .db        DSCR_STRING
-        .db        0
-        .db        0
         .db        <0x0409          ; magic code for US English (LSB)
         .db        >0x0409          ; magic code for US English (MSB)
 str0_end:
