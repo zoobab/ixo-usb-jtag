@@ -22,9 +22,11 @@
 
         .module usb_descriptors
 
-        VID              = 0x2a19         ; Vendor ID 0x16C0  
-        PID              = 0x5441         ; Product ID 0x06AD 
-        VERSION          = 0x0001         ; Product Version (4 indicates *BM device) 
+;        VID              = 0x2a19         ; Vendor ID 0x16C0  
+;        PID              = 0x5441         ; Product ID 0x06AD 
+        VID              = 0x16C0         ; Vendor ID 0x16C0  
+        PID              = 0x06AD         ; Product ID 0x06AD 
+        VERSION          = 0xff00         ; Product Version (4 indicates *BM device) 
         USB_VER          = 0x0110         ; Support USB version 1.10 
         USB_ATTR         = 0x80           ; Bus powered, not self-powered, no remote wakeup
         FTD_ATTR         = 0x001C         ; Set USB version, use version string, enable suspend PD
