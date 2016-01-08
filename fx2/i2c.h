@@ -29,6 +29,6 @@ unsigned char i2c_read (unsigned char addr, xdata unsigned char *buf, unsigned c
 // returns non-zero if successful, else 0
 unsigned char i2c_write (unsigned char addr, xdata const unsigned char *buf, unsigned char len);
 
-unsigned char eeprom_read (unsigned char prom_addr, unsigned char addr, unsigned char length, xdata unsigned char *buf);
+unsigned char eeprom_read (unsigned char addr, unsigned char length, xdata unsigned char *buf);
 
 #endif /* _I2C_H_ */

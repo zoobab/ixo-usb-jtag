@@ -120,13 +120,24 @@ i2c_write (unsigned char addr, xdata const unsigned char *buf, unsigned char len
   return 0;
 }
 
+#define EEPROM_TWO_BYTE (I2CS & bmBIT4)
+
 xdata unsigned char eeprom_addr;
-unsigned char eeprom_read (unsigned char prom_addr, unsigned char addr, unsigned char length, xdata unsigned char *buf)
+unsigned char eeprom_read (unsigned char addr, unsigned char length, xdata unsigned char *buf)
 {
-    eeprom_addr = addr;
+    unsigned char prom_addr;
+    xdata unsigned char eeprom_addr[2];
+    if (EEPROM_TWO_BYTE) {
+       prom_addr = 0x51;
+       eeprom_addr[0] = 0;
+       eeprom_addr[1] = addr;
+    } else {
+       prom_addr = 0x50;
+       eeprom_addr[0] = addr;
+    }
 
     // write the address we want to read to the prom
-    if ( !i2c_write( prom_addr, &eeprom_addr, 1 ) ) return 0;
+    if ( !i2c_write( prom_addr, &eeprom_addr[0], EEPROM_TWO_BYTE ? 2 : 1 ) ) return 0;
     if ( !i2c_read ( prom_addr, buf, length ) ) return 0;
 
     return 1;

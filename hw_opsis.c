@@ -43,21 +43,21 @@ void _patch_serial_byte(BYTE index, BYTE value) {
 xdata unsigned char tempbyte = 0;
 void hw_init() {
 	dev_serial[0] = 'f';
-	eeprom_read(0x51, 0xf8, 1, &tempbyte);
+	eeprom_read(0xf8, 1, &tempbyte);
 	_patch_serial_byte(0, tempbyte);
-	eeprom_read(0x51, 0xf8+1, 1, &tempbyte);
+	eeprom_read(0xf8+1, 1, &tempbyte);
 	_patch_serial_byte(1, tempbyte);
-	eeprom_read(0x51, 0xf8+2, 1, &tempbyte);
+	eeprom_read(0xf8+2, 1, &tempbyte);
 	_patch_serial_byte(2, tempbyte);
-	eeprom_read(0x51, 0xf8+3, 1, &tempbyte);
+	eeprom_read(0xf8+3, 1, &tempbyte);
 	_patch_serial_byte(3, tempbyte);
-	eeprom_read(0x51, 0xf8+4, 1, &tempbyte);
+	eeprom_read(0xf8+4, 1, &tempbyte);
 	_patch_serial_byte(4, tempbyte);
-	eeprom_read(0x51, 0xf8+5, 1, &tempbyte);
+	eeprom_read(0xf8+5, 1, &tempbyte);
 	_patch_serial_byte(5, tempbyte);
-	eeprom_read(0x51, 0xf8+6, 1, &tempbyte);
+	eeprom_read(0xf8+6, 1, &tempbyte);
 	_patch_serial_byte(6, tempbyte);
-	eeprom_read(0x51, 0xf8+7, 1, &tempbyte);
+	eeprom_read(0xf8+7, 1, &tempbyte);
 	_patch_serial_byte(7, tempbyte);
 }
 
