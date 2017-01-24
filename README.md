@@ -25,7 +25,6 @@ Cyclone FPGA.
        |             |
        | 24 MHz XTAL |
        |_____________|
-
 ```
 
 Similar boards are available from fpga4fun.com - the boards named "Saxo-L" and
