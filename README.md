@@ -14,6 +14,7 @@ for a basic JTAG adapter. I don't have detailed schematics available; my test
 setup consists of a FX2 on a custom board where it's directly connected to a
 Cyclone FPGA.
 
+```
         ____________
        |            |
        | Cypress    |
@@ -25,6 +26,7 @@ Cyclone FPGA.
        | 24 MHz XTAL |
        |_____________|
 
+```
 
 Similar boards are available from fpga4fun.com - the boards named "Saxo-L" and
 "Xylo-EM" are pre-wired for use with an adapted version of my code, while
